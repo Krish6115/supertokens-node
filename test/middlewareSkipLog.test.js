@@ -69,6 +69,6 @@ describe(`Middleware skip debug log: ${printPath("[test/middlewareSkipLog.test.j
         const log = await skippedRequestLog(undefined, "/other/path");
         assert(log.includes("Request path: /other/path"));
         assert(log.includes("Effective base path (apiGatewayPath + apiBasePath): /auth"));
-        assert(!log.includes("apiGatewayPath"));
+        assert(!log.includes("prefixed with the configured apiGatewayPath"));
     });
 });
