@@ -59,7 +59,7 @@ describe(`Middleware skip debug log: ${printPath("[test/middlewareSkipLog.test.j
     it("prints the apiBasePath and the gateway explanation, without the query string", async function () {
         const log = await skippedRequestLog("/gateway", "/other/path?token=SECRET");
         assert(log.includes("Request path: /gateway/other/path"));
-        assert(log.includes("Config path (apiBasePath): /gateway/auth"));
+        assert(log.includes("Effective base path (apiGatewayPath + apiBasePath): /gateway/auth"));
         assert(log.includes("prefixed with the configured apiGatewayPath (/gateway)"));
         assert(log.includes("received URL (/other/path)"));
         assert(!log.includes("SECRET"));
@@ -68,7 +68,7 @@ describe(`Middleware skip debug log: ${printPath("[test/middlewareSkipLog.test.j
     it("only prints the apiBasePath when there is no apiGatewayPath", async function () {
         const log = await skippedRequestLog(undefined, "/other/path");
         assert(log.includes("Request path: /other/path"));
-        assert(log.includes("Config path (apiBasePath): /auth"));
+        assert(log.includes("Effective base path (apiGatewayPath + apiBasePath): /auth"));
         assert(!log.includes("apiGatewayPath"));
     });
 });

@@ -473,7 +473,7 @@ export default class SuperTokens {
             logDebugMessage(
                 "middleware: Not handling because request path did not start with config path. Request path: " +
                     path.getAsStringDangerous() +
-                    ". Config path (apiBasePath): " +
+                    ". Effective base path (apiGatewayPath + apiBasePath): " +
                     this.appInfo.apiBasePath.getAsStringDangerous() +
                     (this.appInfo.apiGatewayPath.getAsStringDangerous() !== ""
                         ? ". The request path is the received URL (" +
