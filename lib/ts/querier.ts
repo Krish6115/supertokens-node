@@ -28,8 +28,9 @@ import type SuperTokens from "./supertokens";
 import STError from "./error";
 import crossFetch from "cross-fetch";
 
-// Prefix of the message sent by the core (with status 400) when the tenant of a request is unknown. An unknown app is
-// deliberately not matched: the app comes from the connectionURI, so it is a server misconfiguration, not a bad request.
+// Prefix of the message sent by the core (with status 400) when the tenant of a request is unknown. Note that on
+// tenant-scoped APIs the core uses the same text when the app (taken from the connectionURI) is unknown, so a
+// connectionURI misconfiguration is also reported as "Tenant not found"; the core's full message is in the debug log.
 const TENANT_NOT_FOUND_MESSAGE_PREFIX = "AppId or tenantId not found => Tenant with";
 
 type CoreResponse = Pick<Response, "status" | "headers" | "text" | "json">;
