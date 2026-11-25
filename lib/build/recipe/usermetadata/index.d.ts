@@ -11,14 +11,16 @@ export default class Wrapper {
         status: "OK";
         metadata: any;
     }>;
+    static updateUserMetadata(
+        userId: string,
+        metadataUpdate: JSONObject,
+        userContext?: Record<string, any>
+    ): ReturnType<RecipeInterface["updateUserMetadata"]>;
     static updateUserMetadata<T extends object>(
         userId: string,
         metadataUpdate: MetadataUpdate<T>,
         userContext?: Record<string, any>
-    ): Promise<{
-        status: "OK";
-        metadata: JSONObject;
-    }>;
+    ): ReturnType<RecipeInterface["updateUserMetadata"]>;
     static clearUserMetadata(
         userId: string,
         userContext?: Record<string, any>
@@ -30,4 +32,4 @@ export declare const init: typeof Recipe.init;
 export declare const getUserMetadata: typeof Wrapper.getUserMetadata;
 export declare const updateUserMetadata: typeof Wrapper.updateUserMetadata;
 export declare const clearUserMetadata: typeof Wrapper.clearUserMetadata;
-export type { RecipeInterface, JSONObject };
+export type { RecipeInterface, JSONObject, MetadataUpdate };

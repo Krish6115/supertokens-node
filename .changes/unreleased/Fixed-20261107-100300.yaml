@@ -1,3 +1,3 @@
 kind: Fixed
-body: "`UserMetadata.updateUserMetadata` now accepts values typed with a TypeScript `interface` (also nested ones), not only `type` aliases or object literals. Arrays, primitives and non JSON values such as functions or dates are still rejected at compile time ([#857](https://github.com/supertokens/supertokens-node/issues/857))."
+body: "`UserMetadata.updateUserMetadata` now accepts values typed with a TypeScript `interface` (also nested ones), not only `type` aliases or object literals. Arrays, primitives and values whose static type exposes non JSON members (functions, class constructors, `Date`, `Error`, bare `object`) are rejected at compile time; this is a check of the static type only. Existing calls that pass a `JSONObject` keep compiling unchanged ([#857](https://github.com/supertokens/supertokens-node/issues/857))."
 time: 2026-11-07T10:03:00Z

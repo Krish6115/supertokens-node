@@ -28,6 +28,7 @@ import {
     SupertokensService as SupertokensServiceP,
 } from "../../recipe/passwordless/smsdelivery";
 import UserMetadata from "../../recipe/usermetadata";
+import type { JSONObject as UserMetadataJSONObject } from "../../recipe/usermetadata";
 import { BooleanClaim, PrimitiveClaim } from "../../recipe/session/claims";
 import UserRoles from "../../recipe/userroles";
 import Dashboard from "../../recipe/dashboard";
@@ -156,6 +157,20 @@ UserMetadata.updateUserMetadata("...", ["a"]);
 UserMetadata.updateUserMetadata("...", { fn: () => 1 });
 // @ts-expect-error
 UserMetadata.updateUserMetadata("...", { date: new Date() });
+// @ts-expect-error
+UserMetadata.updateUserMetadata("...", { inner: {} as object });
+// @ts-expect-error
+UserMetadata.updateUserMetadata("...", { cls: class Foo {} });
+// @ts-expect-error
+UserMetadata.updateUserMetadata("...", { err: new Error("e") });
+
+// generic wrappers that compiled before (constrained to JSONObject, or explicitly typed) must keep compiling
+function saveMetadataGeneric<M extends UserMetadataJSONObject>(id: string, m: M) {
+    return UserMetadata.updateUserMetadata(id, m);
+}
+saveMetadataGeneric("...", { a: 1 });
+UserMetadata.updateUserMetadata("...", {} as UserMetadataJSONObject);
+UserMetadata.updateUserMetadata<UserMetaInterface>("...", userMetaFromInterface);
 
 UserMetadata.getUserMetadata("xyz").then((data) => {
     let firstName: string = data.metadata.firstName;

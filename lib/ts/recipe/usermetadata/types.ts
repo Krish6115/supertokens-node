@@ -64,17 +64,24 @@ export type RecipeInterface = {
 
 /**
  * Recursively checks that `V` can be stored as JSON. Unlike `JSONObject`, it does not require an index signature,
- * so values typed with a TypeScript `interface` are accepted, at any depth. Functions, symbols, dates etc. resolve to
- * `never`.
+ * so values typed with a TypeScript `interface` are accepted, at any depth. Types that statically expose non JSON
+ * members (functions, class constructors, `Date`, `Error`, symbols, bare `object`...) resolve to `never`. Note that
+ * this is a compile time check of the static type only.
  */
 export type JSONCompatible<V> = V extends JSONPrimitive | undefined
     ? V
     : V extends (...args: any[]) => any
     ? never
+    : V extends abstract new (...args: any[]) => any
+    ? never
+    : V extends Error
+    ? never
     : V extends ReadonlyArray<infer U>
     ? Array<JSONCompatible<U>>
     : V extends object
-    ? { [K in keyof V]: JSONCompatible<V[K]> }
+    ? object extends V
+        ? never // bare `object` / `{}` carry no information about their content
+        : { [K in keyof V]: JSONCompatible<V[K]> }
     : never;
 
 /**

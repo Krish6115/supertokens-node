@@ -28,17 +28,28 @@ export default class Wrapper {
         });
     }
 
-    // `MetadataUpdate<T>` (instead of `JSONObject`) lets callers pass values typed with a TS `interface`, which has
-    // no implicit index signature and is therefore not assignable to `JSONObject`, while still rejecting values
-    // that are not JSON compatible objects (primitives, arrays, functions, ...).
+    // The first overload keeps accepting `JSONObject` (and generic wrappers constrained to it). The second one lets
+    // callers pass values typed with a TS `interface`, which has no implicit index signature and is therefore not
+    // assignable to `JSONObject`, while still rejecting values that are not JSON compatible objects (primitives,
+    // arrays, functions, ...).
+    static async updateUserMetadata(
+        userId: string,
+        metadataUpdate: JSONObject,
+        userContext?: Record<string, any>
+    ): ReturnType<RecipeInterface["updateUserMetadata"]>;
     static async updateUserMetadata<T extends object>(
         userId: string,
         metadataUpdate: MetadataUpdate<T>,
         userContext?: Record<string, any>
-    ) {
+    ): ReturnType<RecipeInterface["updateUserMetadata"]>;
+    static async updateUserMetadata(
+        userId: string,
+        metadataUpdate: JSONObject,
+        userContext?: Record<string, any>
+    ): ReturnType<RecipeInterface["updateUserMetadata"]> {
         return await Recipe.getInstanceOrThrowError().recipeInterfaceImpl.updateUserMetadata({
             userId,
-            metadataUpdate: metadataUpdate as JSONObject,
+            metadataUpdate,
             userContext: getUserContext(userContext),
         });
     }
@@ -56,4 +67,4 @@ export const getUserMetadata = Wrapper.getUserMetadata;
 export const updateUserMetadata = Wrapper.updateUserMetadata;
 export const clearUserMetadata = Wrapper.clearUserMetadata;
 
-export type { RecipeInterface, JSONObject };
+export type { RecipeInterface, JSONObject, MetadataUpdate };
